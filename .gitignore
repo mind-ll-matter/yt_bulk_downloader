@@ -1,0 +1,11 @@
+# Ignore everything
+*
+
+# But not these files...
+!yt_bulk_downloader.py
+!yt_extract_playlists.py
+!yt_extract_audio.py
+!README.md
+
+# And not this file
+!.gitignore 
