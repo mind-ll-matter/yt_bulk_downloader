@@ -13,19 +13,33 @@ This repository contains three Python scripts that work together to download mem
 
 ## Setup
 
-1. Install the required Python package:
-```bash
-pip install win10toast
-```
+1. Create and activate a virtual environment (recommended):
+   ```bash
+   # Create virtual environment
+   python -m venv venv
 
-2. Install yt-dlp:
+   # Activate virtual environment
+   # On Windows PowerShell:
+   .\venv\Scripts\Activate.ps1
+   # On Windows Command Prompt:
+   .\venv\Scripts\activate.bat
+   # On Linux/Mac:
+   source venv/bin/activate
+   ```
+
+2. Install the required Python package:
+   ```bash
+   pip install win10toast
+   ```
+
+3. Install yt-dlp:
    - **Windows**: Download the latest `yt-dlp.exe` from [yt-dlp releases](https://github.com/yt-dlp/yt-dlp/releases) and place it in your project directory or add it to your system PATH
    - **Linux/Mac**: Install via pip:
      ```bash
      pip install yt-dlp
      ```
 
-3. Install FFmpeg:
+4. Install FFmpeg:
    - **Windows**:
      1. Download FFmpeg from [FFmpeg official builds](https://www.gyan.dev/ffmpeg/builds/) (get the "essentials" build)
      2. Extract the downloaded zip file
