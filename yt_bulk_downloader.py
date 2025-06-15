@@ -130,25 +130,42 @@ def download_video(video_url, video_title, playlist_folder, index, retry_count=0
             "--retries", "1",
             "--fragment-retries", "1",
             "--file-access-retries", "1",
-            "--retry-sleep", "10",
+            "--retry-sleep", "30",
             "-o", f"./videos/{playlist_folder}/{formatted_index} - {safe_title}.%(ext)s",
             video_url
         ]
         
         # Only add sleep interval if video is not in archive
         if not skip_sleep:
-            cmd.extend(["--sleep-interval", "10", "--max-sleep-interval", "30"])
+            cmd.extend(["--sleep-interval", "15", "--max-sleep-interval", "45"])
         
         result = subprocess.run(cmd, stderr=subprocess.PIPE, text=True, check=False)
 
-        # Check for cookie warning in output
-        if "cookies are no longer valid" in result.stderr:
-            if retry_count < 1:  # Only retry once
+        # Check for various error conditions
+        error_output = result.stderr.lower()
+        
+        # Check for cookie warning
+        if "cookies are no longer valid" in error_output:
+            if retry_count < 1:  # Only retry once for cookie issues
                 print("\n🔄 Cookie warning detected, retrying download once...")
                 # time.sleep(10)  # Short pause before retry
                 return download_video(video_url, video_title, playlist_folder, index, retry_count + 1)
             else:
                 error_msg = "Cookie warning persists after retry. Please run the script again."
+                print(f"\n⚠️ {error_msg}")
+                notify_error("YouTube Downloader Error", error_msg)
+                failed_entry = f"{playlist_folder}/{video_title} - {video_url}"
+                add_failed(failed_entry)
+                return False
+
+        # Check for DNS resolution errors
+        if "failed to resolve" in error_output or "getaddrinfo failed" in error_output:
+            if retry_count < 1:  # Reduced to 1 retry for DNS issues
+                print(f"\n🌐 DNS resolution error detected, retrying download after 60 seconds...")
+                time.sleep(60)
+                return download_video(video_url, video_title, playlist_folder, index, retry_count + 1)
+            else:
+                error_msg = f"DNS resolution failed after retry for: {video_title}"
                 print(f"\n⚠️ {error_msg}")
                 notify_error("YouTube Downloader Error", error_msg)
                 failed_entry = f"{playlist_folder}/{video_title} - {video_url}"
@@ -241,6 +258,7 @@ def main():
 
         retry_failed(playlists)
         notify_error("YouTube Downloader", "All downloads completed!")
+        print("\n🎉 All downloads completed successfully! \n You can now set sleep settings to previous values and reactivate Do Not Disturb.")
     except KeyboardInterrupt:
         print("\n⚠️ Script interrupted by user")
         notify_error("YouTube Downloader", "Script was interrupted by user")
