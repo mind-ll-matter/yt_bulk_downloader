@@ -9,6 +9,7 @@ This repository contains three Python scripts that work together to download mem
 - Required Python packages:
   - win10toast
   - yt-dlp
+- FFmpeg (for video/audio processing)
 
 ## Setup
 
@@ -17,7 +18,27 @@ This repository contains three Python scripts that work together to download mem
 pip install win10toast
 ```
 
-2. Make sure you have yt-dlp installed and accessible in your PATH.
+2. Install yt-dlp:
+   - **Windows**: Download the latest `yt-dlp.exe` from [yt-dlp releases](https://github.com/yt-dlp/yt-dlp/releases) and place it in your project directory or add it to your system PATH
+   - **Linux/Mac**: Install via pip:
+     ```bash
+     pip install yt-dlp
+     ```
+
+3. Install FFmpeg:
+   - **Windows**:
+     1. Download FFmpeg from [FFmpeg official builds](https://www.gyan.dev/ffmpeg/builds/) (get the "essentials" build)
+     2. Extract the downloaded zip file
+     3. Copy `ffmpeg.exe`, `ffprobe.exe`, and `ffplay.exe` to your project directory or add the `bin` folder to your system PATH
+   - **Linux**:
+     ```bash
+     sudo apt update
+     sudo apt install ffmpeg
+     ```
+   - **Mac**:
+     ```bash
+     brew install ffmpeg
+     ```
 
 ## Workflow
 
@@ -70,6 +91,7 @@ This will create an `audio` folder with MP3 files.
 - The scripts use random user agents to avoid detection
 - Failed downloads are saved in `failed_downloads.txt` and can be retried later
 - Downloaded videos are tracked in `downloaded.txt` to avoid re-downloading
+- FFmpeg is required for video/audio processing and must be accessible in your PATH or project directory
 
 ## Troubleshooting
 
@@ -77,5 +99,10 @@ If you encounter cookie-related errors:
 1. Open Firefox
 2. Go to YouTube and ensure you're logged in
 3. Run the script again
+
+If you get FFmpeg-related errors:
+1. Verify FFmpeg is installed correctly by running `ffmpeg -version` in your terminal
+2. Make sure FFmpeg executables are in your PATH or project directory
+3. For Windows users, ensure you have both `ffmpeg.exe` and `ffprobe.exe`
 
 For other issues, check the Windows notifications for error messages. 
