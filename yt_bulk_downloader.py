@@ -131,6 +131,7 @@ def download_video(video_url, video_title, playlist_folder, index, retry_count=0
             "--fragment-retries", "1",
             "--file-access-retries", "1",
             "--retry-sleep", "30",
+            "-f", "bestvideo[height=720][fps=60]+bestaudio/best[height=720][fps=60]/best[height=720]/best",
             "-o", f"./videos/{playlist_folder}/{formatted_index} - {safe_title}.%(ext)s",
             video_url
         ]
